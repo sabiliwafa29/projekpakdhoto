@@ -1,0 +1,472 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char duduk[5][10];
+char duduk1[5][10];
+char jawab;
+int film, tiket,tiket1;
+char judul[3][20] = {"No Data", "Dr. Strange", "KKN Ds Penari"};
+int row,row1;
+char cek1[5] = {'A', 'B', 'C', 'D', 'E'};
+struct film1
+{
+    double hargatiket[8] = {0, 25.000, 25.000, 25.000, 25.000, 30.000, 40.000, 40.000};
+    int jam_ck[20];
+    int jam[20];
+    double waktu[20] = {0, 11.30, 12.45, 14.40, 16.00, 19.10, 20.45};
+    int hari_ck[20];
+    int hari[20];
+    int col;
+    char roww[100];
+    char tanggal[8][50] = {"No Data", "21 Desember 2022", "22 Desember 2022", "23 Desember 2022", "24 Desember 2022", "25 Desember 2022", "26 Desember 2022", "27 Desember 2022"};
+    film1 *prev, *next;
+} * head, *tail, *current;
+
+struct film2
+{
+    double hargatiket1[8] = {0, 25.000, 25.000, 25.000, 25.000, 30.000, 40.000, 40.000};
+    int jam_ck1[20];
+    int jam1[20];
+    double waktu1[20] = {0, 11.30, 12.45, 14.40, 16.00, 19.10, 20.45};
+    int hari_ck1[20];
+    int hari1[20];
+    int col1;
+    char roww1[100];
+    char tanggal1[8][50] = {"No Data", "21 Desember 2022", "22 Desember 2022", "23 Desember 2022", "24 Desember 2022", "25 Desember 2022", "26 Desember 2022", "27 Desember 2022"};
+    film2 *prev1, *next1;
+} *atas, *bawah, *sekarang;
+
+
+film1 dr; film2 kkn;
+int jmlh1 = 0, jmlh2 = 0;
+
+void homepage()
+{
+    printf("\n \t\t\tSELAMAT DATANG DI BIOSKOP CINEMA XXI \t\t\t\n\n");
+    printf(" |==============================================================================|\n");
+    printf(" |\t Tayang hari ini Film 'Doctor Strange : Multiverese of Madness'\t\t|\n");
+    printf(" |==============================================================================|\n");
+    printf(" |\t  |\t\t\t|\t\t\tJam\t\t\t|\n");
+    printf(" | Studio |   Film\t\t|===============================================|\n");
+    printf(" |\t  |\t\t\t|   1   |   2   |   3   |   4   |   5   |   6   |\n");
+    printf(" |==============================================================================|\n");
+    printf(" |   1    | Dr. Strange \t| 11.30 | 12.45 | 14.40 | 16.00 | 19.10 | 20.45 |\n");
+    printf(" |==============================================================================|\n");
+    printf(" |   2    | KKN Ds Penari \t| 11.30 | 12.45 | 14.40 | 16.00 | 19.10 | 20.45 |\n");
+    printf(" |==============================================================================|\n");
+    printf(" | \t\tHari\t\t\t|\t\tHarga\t\t\t|\n");
+    printf(" |==============================================================================|\n");
+    printf(" | \t1.\tSenin\t\t\t|\t\tRp 25.000\t\t|\n");
+    printf(" | \t2.\tSelasa\t\t\t|\t\tRp 25.000\t\t|\n");
+    printf(" | \t3.\tRabu\t\t\t|\t\tRp 25.000\t\t|\n");
+    printf(" | \t4.\tKamis\t\t\t|\t\tRp 25.000\t\t|\n");
+    printf(" | \t5.\tJum'at\t\t\t|\t\tRp 30.000\t\t|\n");
+    printf(" | \t6.\tSabtu\t\t\t|\t\tRp 40.000\t\t|\n");
+    printf(" | \t7.\tMinggu\t\t\t|\t\tRp 40.000\t\t|\n");
+    printf(" |==============================================================================|\n\n");
+}
+
+void pushTail(char roww[], int col)
+{
+    current = (film1 *)malloc(sizeof(struct film1));
+    strcpy(current->roww, roww);
+    current->col = col;
+    current->prev = current->next = NULL;
+    if (head == NULL)
+    {
+        head = tail = current;
+    }
+    else
+    {
+        head->prev = tail;
+        tail->next = current;
+        tail = current;
+    }
+    tail->next = NULL;
+}
+
+void tampilkursi()
+{
+    int i, j;
+    printf("\n\t\t TEMPAT DUDUK\n");
+    printf("\t 1  2  3  4  5  6  7  8  9  10\n\n");
+    fflush(stdin);
+    for (i = 0; i < 5; i++)
+    {
+        printf("Baris %c: ", cek1[i]);
+        for (j = 0; j < 10; j++)
+        {
+            if (duduk[i][j] == 0)
+            {
+                printf("%d  ", duduk[i][j]);
+            }
+            else
+            {
+                printf("X  ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void delhead(){
+    current = head;
+    if (head == NULL)
+    {
+        printf("\n");
+    }
+    else if (head == tail)
+    {
+        head = tail = NULL;
+    }
+    else
+    {
+        head = head->next;
+        head->prev = NULL;
+        free(current);
+    }
+}
+
+void pilihkursi()
+{
+    int k, col;
+    char roww[100];
+    fflush(stdin);
+    printf("\nMasukkan baris : ");
+    gets(roww);
+    fflush(stdin);
+    if (strcmp(roww,"A")==0)
+    {
+        row = 1;
+    }
+    else if (strcmp(roww,"B")==0)
+    {
+        row = 2;
+    }
+    else if (strcmp(roww,"C")==0)
+    {
+        row = 3;
+    }
+    else if (strcmp(roww,"D")==0)
+    {
+        row = 4;
+    }
+    else if (strcmp(roww,"E")==0)
+    {
+        row = 5;
+    }
+    printf("\nMasukkan nomor : ");
+    scanf("%d", &col);
+    fflush(stdin);
+    pushTail((char *)roww, col);
+    if (row > 5 || col > 10)
+    {
+        printf("Kursi tidak termasuk!\n");
+        pilihkursi();
+    }
+    else if (duduk[row-1][col - 1] != 0)
+    {
+        printf("Kursi sudah dipesan!\n");
+        delhead();
+        pilihkursi();
+    }
+    else
+    {
+        duduk[row-1][col - 1] = 1;
+        tampilkursi();
+    }
+}
+
+void pesankursi()
+{
+    int i;
+    printf("\nBerapa banyak tempat duduk yang ingin anda pesan \t: ");
+    scanf("%d", &tiket);
+    for (i = 1; i <= tiket; i++)
+    {
+        pilihkursi();
+    }
+}
+
+void del()
+{
+    current = head;
+    if (head == NULL)
+    {
+        printf("\n");
+    }
+    else
+    {
+        head = tail = NULL;
+        free(current);
+        printf("\n");
+    }
+}
+
+void cetak_tiket()
+{
+    current = head;
+    if (current != NULL)
+    {
+        while (current != NULL)
+        {
+            printf(" |==============================================|\n");
+            printf(" | \t\tTiket Bioskop CINEMA XXI\t|\n");
+            printf(" |==============================================|\n");
+            printf(" | \tJudul Film \t: %s\t\t|\n", judul[film]);
+            printf(" | \tTanggal \t: %s\t|\n", dr.tanggal[dr.hari[jmlh1]]);
+            printf(" | \tJam \t\t: %.2f\t\t\t|\n", dr.waktu[dr.jam[jmlh1]]);
+            printf(" | \tKursi \t\t: %s-%d\t\t\t|\n", current->roww, current->col);
+            printf(" | \tHarga \t\t: %.3f \t\t|\n", dr.hargatiket[dr.hari[jmlh1]]);
+            printf(" |==============================================|\n\n");
+            current = current->next;
+        }
+    }
+    else
+    {
+        printf("Tidak Ada Data\n");
+    }
+    del();
+}
+
+void input_hari_jam(){
+    printf(" Kapan Anda ingin menonton film itu? (masukkan nomor) \t: ");
+    scanf("%d", &dr.hari_ck[jmlh1]);
+    printf(" Jam berapa Anda ingin menonton film? (masukkan nomor) \t: ");
+    scanf("%d", &dr.jam_ck[jmlh1]);
+
+}
+
+
+void pushTail1(char roww[], int col)
+{
+    sekarang = (film2 *)malloc(sizeof(struct film2));
+    strcpy(sekarang->roww1, roww);
+    sekarang->col1 = col;
+    sekarang->prev1 = sekarang->next1 = NULL;
+    if (atas == NULL)
+    {
+        atas = bawah = sekarang;
+    }
+    else
+    {
+        atas->prev1= bawah;
+        bawah->next1 = sekarang;
+        bawah = sekarang;
+    }
+    bawah->next1 = NULL;
+}
+
+void tampilkursi1()
+{
+    int i, j;
+    printf("\n\t\t TEMPAT DUDUK\n");
+    printf("\t 1  2  3  4  5  6  7  8  9  10\n\n");
+    fflush(stdin);
+    for (i = 0; i < 5; i++)
+    {
+        printf("Baris %c: ", cek1[i]);
+        for (j = 0; j < 10; j++)
+        {
+            if (duduk1[i][j] == 0)
+            {
+                printf("%d  ", duduk1[i][j]);
+            }
+            else
+            {
+                printf("X  ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void delhead1(){
+    sekarang = atas;
+    if (atas == NULL)
+    {
+        printf("\n");
+    }
+    else if (atas == bawah)
+    {
+        atas = sekarang = NULL;
+    }
+    else
+    {
+        atas = atas->next1;
+        atas->prev1 = NULL;
+        free(sekarang);
+    }
+}
+
+void pilihkursi1()
+{
+    int k, col1;
+    char roww1[100];
+    fflush(stdin);
+    printf("\nMasukkan baris : ");
+    gets(roww1);
+    fflush(stdin);
+    if (strcmp(roww1,"A")==0)
+    {
+        row1 = 1;
+    }
+    else if (strcmp(roww1,"B")==0)
+    {
+        row1 = 2;
+    }
+    else if (strcmp(roww1,"C")==0)
+    {
+        row1 = 3;
+    }
+    else if (strcmp(roww1,"D")==0)
+    {
+        row1 = 4;
+    }
+    else if (strcmp(roww1,"E")==0)
+    {
+        row1 = 5;
+    }
+    printf("\nMasukkan nomor : ");
+    scanf("%d", &col1);
+    fflush(stdin);
+    pushTail1((char *)roww1, col1);
+    if (row1 > 5 || col1 > 10)
+    {
+        printf("Kursi tidak termasuk!\n");
+        pilihkursi1();
+    }
+    else if (duduk1[row1-1][col1 - 1] != 0)
+    {
+        printf("Kursi sudah dipesan!\n");
+        delhead1();
+        pilihkursi1();
+    }
+    else
+    {
+        duduk1[row1-1][col1 - 1] = 1;
+        tampilkursi1();
+    }
+}
+
+void pesankursi1()
+{
+    int i;
+    printf("\nBerapa banyak tempat duduk yang ingin anda pesan \t: ");
+    scanf("%d", &tiket1);
+    for (i = 1; i <= tiket1; i++)
+    {
+        pilihkursi1();
+    }
+}
+
+void del1()
+{
+    sekarang = atas;
+    if (atas == NULL)
+    {
+        printf("\n");
+    }
+    else
+    {
+        atas = bawah = NULL;
+        free(sekarang);
+        printf("\n");
+    }
+}
+
+void cetak_tiket1()
+{
+    sekarang = atas;
+    if (sekarang != NULL)
+    {
+        while (sekarang != NULL)
+        {
+            printf(" |==============================================|\n");
+            printf(" | \t\tTiket Bioskop CINEMA XXI\t|\n");
+            printf(" |==============================================|\n");
+            printf(" | \tJudul Film \t: %s\t\t|\n", judul[film]);
+            printf(" | \tTanggal \t: %s\t|\n", kkn.tanggal1[kkn.hari1[jmlh2]]);
+            printf(" | \tJam \t\t: %.2f\t\t\t|\n", kkn.waktu1[kkn.jam1[jmlh2]]);
+            printf(" | \tKursi \t\t: %s-%d\t\t\t|\n", sekarang->roww1, sekarang->col1);
+            printf(" | \tHarga \t\t: %.3f \t\t|\n", kkn.hargatiket1[kkn.hari1[jmlh2]]);
+            printf(" |==============================================|\n\n");
+            sekarang = sekarang->next1;
+        }
+    }
+    else
+    {
+        printf("Tidak Ada Data\n");
+    }
+    del1();
+}
+
+void input_hari_jam1(){
+    printf(" Kapan Anda ingin menonton film itu? (masukkan nomor) \t: ");
+    scanf("%d", &kkn.hari_ck1[jmlh2]);
+    printf(" Jam berapa Anda ingin menonton film? (masukkan nomor) \t: ");
+    scanf("%d", &kkn.jam_ck1[jmlh2]);
+
+}
+
+int main()
+{
+    printf("\n");
+    while (1)
+    {
+        homepage();
+        printf("Film apa yang ingin anda tonton? : ");
+        scanf("%d",&film);
+        switch (film)
+        {
+        case 1:
+            input_hari_jam();
+
+            tampilkursi();
+
+            pesankursi();
+
+            for (int z = 1; z <= tiket; z++)
+            {
+                dr.hari[jmlh1] = dr.hari_ck[jmlh1];
+                dr.jam[jmlh1] = dr.jam_ck[jmlh1];
+            }
+            cetak_tiket();
+            jmlh1++;
+            break;
+        case 2: 
+            del1();
+            input_hari_jam1();
+
+            tampilkursi1();
+
+            pesankursi1();
+
+            for (int z = 1; z <= tiket1; z++)
+            {
+                kkn.hari1[jmlh2] = kkn.hari_ck1[jmlh2];
+                kkn.jam1[jmlh2] = kkn.jam_ck1[jmlh2];
+            }
+            
+            cetak_tiket1();
+            jmlh2++;
+            break;
+        }
+
+        fflush(stdin);
+        printf("\n\nApakah ingin tambah tiket lagi? (Y/T) : ");
+        scanf("%c", &jawab);
+        if (jawab == 'Y' || jawab == 'y')
+        {
+            
+        }
+        else
+        {
+            break;
+        }
+    }
+    printf("\n\t Terima kasih telah memesan tiket di CINEMA XXI!\n");
+}
